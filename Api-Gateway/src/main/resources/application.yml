@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: Api-Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: service-a-route
+          uri: lb://SERVICE-A
+          predicates:
+            - Path=/service-a/**
+          filters:
+            - StripPrefix=1
+
+        - id: service-b-route
+          uri: lb://SERVICE-B
+          predicates:
+            - Path=/service-b/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
