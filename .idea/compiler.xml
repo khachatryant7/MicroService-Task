@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/scoop/persist/gradle/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.34/ec547ef414ab1d2c040118fb9c1c265ada63af14/lombok-1.18.34.jar" />
+        </processorPath>
+        <module name="MicroService-Task.Service-A.main" />
+        <module name="MicroService-Task.Service-A.test" />
+        <module name="MicroService-Task.Service-B.test" />
+        <module name="MicroService-Task.Service-B.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="21" />
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="MicroService-Task.Api-Gateway" options="-parameters" />
+      <module name="MicroService-Task.Api-Gateway.main" options="-parameters" />
+      <module name="MicroService-Task.Api-Gateway.test" options="-parameters" />
+      <module name="MicroService-Task.Eureka-Server" options="-parameters" />
+      <module name="MicroService-Task.Eureka-Server.main" options="-parameters" />
+      <module name="MicroService-Task.Eureka-Server.test" options="-parameters" />
+      <module name="MicroService-Task.Service-A" options="-parameters" />
+      <module name="MicroService-Task.Service-A.main" options="-parameters" />
+      <module name="MicroService-Task.Service-A.test" options="-parameters" />
+      <module name="MicroService-Task.Service-B" options="-parameters" />
+      <module name="MicroService-Task.Service-B.main" options="-parameters" />
+      <module name="MicroService-Task.Service-B.test" options="-parameters" />
+    </option>
+  </component>
+</project>
