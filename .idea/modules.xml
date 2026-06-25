@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Service-A/MicroService-Task.Service-A.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Service-A/MicroService-Task.Service-A.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Service-A/MicroService-Task.Service-A.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Service-A/MicroService-Task.Service-A.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Service-B/MicroService-Task.Service-B.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Service-B/MicroService-Task.Service-B.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Service-B/MicroService-Task.Service-B.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Service-B/MicroService-Task.Service-B.test.iml" />
     </modules>
   </component>
 </project>

@@ -2,28 +2,38 @@ package com.example.servicea.controller;
 
 import com.example.servicea.dto.UserDto;
 import com.example.servicea.entity.UserEntity;
+import com.example.servicea.kafka.RequestProducer;
+import com.example.servicea.kafka.RequestReplyConsumer;
+import com.example.servicea.kafka.UserEventProducer;
 import com.example.servicea.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api")
 public class ServiceAController {
 
     private final UserRepository userRepository;
+    private final UserEventProducer userEventProducer;
+    private final RequestProducer requestProducer;
+    private final RequestReplyConsumer requestReplyConsumer;
 
-    public ServiceAController(UserRepository userRepository) {
+    public ServiceAController(UserRepository userRepository, UserEventProducer userEventProducer, RequestProducer requestProducer, RequestReplyConsumer requestReplyConsumer) {
         this.userRepository = userRepository;
+        this.userEventProducer = userEventProducer;
+        this.requestProducer = requestProducer;
+        this.requestReplyConsumer = requestReplyConsumer;
     }
 
-    @GetMapping("/v1/hello")
+    @GetMapping("/hello")
     public String ServiceA(){
         return "Hello from service A!";
     }
-
-    @GetMapping("/v1//users")
+    
+    @GetMapping("/users")
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
@@ -44,5 +54,14 @@ public class ServiceAController {
                 .password("default")
                 .build();
         return ResponseEntity.ok(userRepository.save(user));
+    }
+
+    @GetMapping("/ask")
+    public ResponseEntity<String> ask(@RequestParam String message) throws Exception {
+        String correlationId = java.util.UUID.randomUUID().toString();
+        CompletableFuture<String> future = requestReplyConsumer.wait(correlationId);
+        requestProducer.sendRequest(correlationId, message);
+        String reply = future.get(10, java.util.concurrent.TimeUnit.SECONDS);
+        return ResponseEntity.ok(reply);
     }
 }

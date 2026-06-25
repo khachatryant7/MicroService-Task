@@ -3,21 +3,31 @@ package com.example.servicea.controller;
 import com.example.servicea.dto.UserDtoV2;
 import com.example.servicea.dto.UserDtoV2Request;
 import com.example.servicea.entity.UserEntity;
+import com.example.servicea.kafka.RequestProducer;
+import com.example.servicea.kafka.RequestReplyConsumer;
+import com.example.servicea.kafka.UserEventProducer;
 import com.example.servicea.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequestMapping("/api")
 public class ServiceAControllerV2 {
 
     private final UserRepository userRepository;
+    private final UserEventProducer userEventProducer;
+    private final RequestProducer requestProducer;
+    private final RequestReplyConsumer requestReplyConsumer;
 
-    public ServiceAControllerV2(UserRepository userRepository) {
+    public ServiceAControllerV2(UserRepository userRepository, UserEventProducer userEventProducer, RequestProducer requestProducer, RequestReplyConsumer requestReplyConsumer) {
         this.userRepository = userRepository;
+        this.userEventProducer = userEventProducer;
+        this.requestProducer = requestProducer;
+        this.requestReplyConsumer = requestReplyConsumer;
     }
 
     @GetMapping("/v2/hello")
@@ -54,4 +64,3 @@ public class ServiceAControllerV2 {
         return ResponseEntity.ok(userRepository.save(user));
     }
 }
-

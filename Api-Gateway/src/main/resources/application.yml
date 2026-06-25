@@ -19,6 +19,9 @@ spring:
             - StripPrefix=1
 
 eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
