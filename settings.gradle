@@ -1,0 +1,6 @@
+rootProject.name = 'MicroService-Task'
+
+include 'Eureka-Server'
+include 'Api-Gateway'
+include 'Service-A'
+include 'Service-B'
