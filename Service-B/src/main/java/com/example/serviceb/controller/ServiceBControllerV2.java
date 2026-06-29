@@ -23,7 +23,7 @@ public class ServiceBControllerV2 {
 
     @GetMapping("/v2/hello")
     public String hello(){
-        return "Hello from service B!";
+        return "Hello from v2 service B!";
     }
 
     @GetMapping("/v2/users")

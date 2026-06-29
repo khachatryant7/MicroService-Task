@@ -3,6 +3,7 @@ package com.example.serviceb.controller;
 
 import com.example.serviceb.dto.UserDto;
 import com.example.serviceb.entity.UserEntity;
+import com.example.serviceb.kafka.UserEventConsumer;
 import com.example.serviceb.kafka.UserEventProducer;
 import com.example.serviceb.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,19 @@ public class ServiceBController {
 
     private final UserEventProducer userEventProducer;
     private final UserRepository userRepository;
+    private final UserEventConsumer userEventConsumer;
 
-    public ServiceBController(UserEventProducer userEventProducer, UserRepository userRepository) {
+
+
+    public ServiceBController(UserEventProducer userEventProducer, UserRepository userRepository, UserEventConsumer userEventConsumer) {
         this.userEventProducer = userEventProducer;
         this.userRepository = userRepository;
+        this.userEventConsumer = userEventConsumer;
     }
 
     @GetMapping("/hello")
     public String ServiceB(){
-        return "Hello from service B!";
+        return "Hello from service B! ";
     }
 
     @GetMapping("/users")

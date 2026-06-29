@@ -8,13 +8,11 @@ import com.example.servicea.kafka.RequestReplyConsumer;
 import com.example.servicea.kafka.UserEventProducer;
 import com.example.servicea.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ServiceAControllerV2 {
 
@@ -31,8 +29,8 @@ public class ServiceAControllerV2 {
     }
 
     @GetMapping("/v2/hello")
-    public String helloV2() {
-        return "Hello from service A! (v2)";
+    public String hello(){
+        return "Hello from v2 service A!";
     }
 
     @GetMapping("/v2/users")

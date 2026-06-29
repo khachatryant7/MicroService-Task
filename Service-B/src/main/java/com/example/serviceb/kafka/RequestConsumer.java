@@ -18,8 +18,8 @@ public class RequestConsumer {
     public void onRequest(String msg,
                           @Header(KafkaHeaders.RECEIVED_KEY) String correlationId){
         log.info("[Service-b] received request: {}", msg);
-        String reply = "Hello from service B! You asked" + msg;
-        replyProducer.sendReply(correlationId, msg);
+        String reply = "Hello from service B! You asked" + " " + msg;
+        replyProducer.sendReply(correlationId, reply);
     }
 
 }
