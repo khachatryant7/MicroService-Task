@@ -9,11 +9,12 @@ import com.example.servicea.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/users")
 public class ServiceAController {
 
     private final UserRepository userRepository;
@@ -33,12 +34,12 @@ public class ServiceAController {
         return "Hello from service A!";
     }
     
-    @GetMapping("/users")
+    @GetMapping("/getUser")
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
     public ResponseEntity<?> createUser(
             @RequestHeader(value = "Idempotency-key", required = false) String idempotencyKey,
             @RequestBody UserDto dto){

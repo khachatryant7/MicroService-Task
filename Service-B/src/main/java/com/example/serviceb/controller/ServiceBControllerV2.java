@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v2/users")
 public class ServiceBControllerV2 {
 
     private final UserEventProducer userEventProducer;
@@ -21,17 +21,17 @@ public class ServiceBControllerV2 {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/v2/hello")
+    @GetMapping("/hello")
     public String hello(){
         return "Hello from v2 service B!";
     }
 
-    @GetMapping("/v2/users")
+    @GetMapping("/users")
     public List<UserEntity> getAll() {
         return userRepository.findAll();
     }
 
-    @PostMapping("/v2/users")
+    @PostMapping("/users")
     public ResponseEntity<?> createUser(
             @RequestHeader(value = "Idempotency-key", required = false) String idempotencyKey,
             @RequestBody UserDtoV2Request dto) {

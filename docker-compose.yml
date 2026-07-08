@@ -41,6 +41,7 @@ services:
     ports:
       - '8081:8081'
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=JDBC:mysql://mysql:3306/micro_service
       - SPRING_DATASOURCE_USERNAME=root
@@ -62,6 +63,7 @@ services:
     ports:
       - '8082:8082'
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=JDBC:mysql://mysql:3306/micro_service
       - SPRING_DATASOURCE_USERNAME=root

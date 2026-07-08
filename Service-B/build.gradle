@@ -37,6 +37,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.16.0'
+    testImplementation 'org.mockito:mockito-core:5.16.0'
 }
 
 dependencyManagement {
@@ -47,5 +49,5 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
-    enabled = false
+//    enabled = false
 }

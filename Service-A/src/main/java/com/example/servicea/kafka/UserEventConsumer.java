@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserEventConsumer {
 
-    @KafkaListener(topics = "user-events", groupId = "user-service-group")
+    @KafkaListener(topicPattern = KafkaTopics.TOPIC, groupId = "user-service-group")
     public void consume(String msg){
         log.info("service-a published to Kafka: {}", msg);
     }

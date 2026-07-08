@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 public class UserEventProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private static final String TOPIC = "user-events";
 
     public void sendUserCreateEvent(String email){
 
         String msg = "User created" + email;
+        try {
+            kafkaTemplate.send(KafkaTopics.TOPIC, msg);
+        } catch (RuntimeException e){
+            log.error("Something {}", e.getMessage() );
+        }
         log.info("[service-a] published to Kafka: {}", msg);
-        kafkaTemplate.send(TOPIC, msg);
     }
 }

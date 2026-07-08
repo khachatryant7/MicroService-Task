@@ -14,6 +14,6 @@ public class ReplyProducer {
 
     public void sendReply(String correlationId, String msg) {
         log.info("[service-b] send reply to Kafka: {}", msg);
-        kafkaTemplate.send("reply-topic", correlationId, msg);
+        kafkaTemplate.send(KafkaTopics.TOPIC, correlationId, msg);
     }
 }

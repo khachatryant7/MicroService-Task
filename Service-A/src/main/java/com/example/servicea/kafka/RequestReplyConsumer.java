@@ -22,7 +22,7 @@ public class RequestReplyConsumer {
         return future;
     }
 
-    @KafkaListener(topics = "reply-topic", groupId = "reply-group-id")
+    @KafkaListener(topics = KafkaTopics.TOPIC3, groupId = "reply-group-id")
     public void onReply(String msg,
                         @Header(KafkaHeaders.RECEIVED_KEY) String correlationId) {
         log.info("[service-a] received reply from Kafka: {}", msg);

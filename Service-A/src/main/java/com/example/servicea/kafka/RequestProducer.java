@@ -14,7 +14,7 @@ public class RequestProducer {
 
     public void sendRequest(String correlationId, String msg){
         log.info("[service-a] send request to: Kafka {}", msg);
-        kafkaTemplate.send("request-topic", correlationId, msg);
+        kafkaTemplate.send(KafkaTopics.TOPIC2, correlationId, msg);
     }
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/users")
 public class ServiceBController {
 
     private final UserEventProducer userEventProducer;
@@ -30,7 +30,7 @@ public class ServiceBController {
 
     @GetMapping("/hello")
     public String ServiceB(){
-        return "Hello from service B! ";
+        return "Hello from service B!";
     }
 
     @GetMapping("/users")

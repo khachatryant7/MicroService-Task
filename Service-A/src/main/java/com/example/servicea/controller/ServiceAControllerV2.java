@@ -1,6 +1,5 @@
 package com.example.servicea.controller;
 
-import com.example.servicea.dto.UserDtoV2;
 import com.example.servicea.dto.UserDtoV2Request;
 import com.example.servicea.entity.UserEntity;
 import com.example.servicea.kafka.RequestProducer;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v2/users")
 public class ServiceAControllerV2 {
 
     private final UserRepository userRepository;
@@ -28,20 +27,17 @@ public class ServiceAControllerV2 {
         this.requestReplyConsumer = requestReplyConsumer;
     }
 
-    @GetMapping("/v2/hello")
+    @GetMapping("/hello")
     public String hello(){
         return "Hello from v2 service A!";
     }
 
-    @GetMapping("/v2/users")
-    public List<UserDtoV2> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(u -> new UserDtoV2(u.getId(), u.getEmail(), u.getName()))
-                .toList();
+    @GetMapping("/users")
+    public List<UserEntity> getUsers() {
+        return userRepository.findAll();
     }
 
-    @PostMapping("/v2/users")
+    @PostMapping("/users")
     public ResponseEntity<?> createUserV2(
             @RequestHeader(value = "Idempotency-key", required = false) String idempotencyKey,
             @RequestBody UserDtoV2Request dto) {

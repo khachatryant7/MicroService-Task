@@ -20,14 +20,11 @@ public class LoggingFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest httpRequest = exchange.getRequest();
 
-        LOGGER.info("Recieved request: method = [], path =[], headers = []",
-                httpRequest.getMethod(),
-                httpRequest.getURI().getPath(),
-                httpRequest.getHeaders());
+        LOGGER.info("Recieved request: method = {}, path ={}, headers = {}", httpRequest.getMethod(), httpRequest.getURI().getPath(), httpRequest.getHeaders());
 
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             ServerHttpResponse response = exchange.getResponse();
-            LOGGER.info("Response status: []", response.getStatusCode());
+            LOGGER.info("Response status: {}", response.getStatusCode());
         }));
     }
 

@@ -14,7 +14,7 @@ public class RequestConsumer {
 
     private ReplyProducer replyProducer;
 
-    @KafkaListener(topics = "request-topic" , groupId = "request-group-id")
+    @KafkaListener(topics = KafkaTopics.TOPIC2, groupId = "request-group-id")
     public void onRequest(String msg,
                           @Header(KafkaHeaders.RECEIVED_KEY) String correlationId){
         log.info("[Service-b] received request: {}", msg);

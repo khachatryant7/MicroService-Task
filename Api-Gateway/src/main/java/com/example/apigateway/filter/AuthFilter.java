@@ -19,12 +19,12 @@ public class AuthFilter implements GlobalFilter, Ordered {
                 .getHeaders()
                 .getFirst(HttpHeaders.AUTHORIZATION);
 
-        if(authHeader == null || authHeader.equals(TOKEN)){
+        if (authHeader == null || authHeader.equals(TOKEN)) {
             ServerHttpResponse response = (ServerHttpResponse) exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();
         }
-            return chain.filter(exchange);
+        return chain.filter(exchange);
     }
 
     @Override
