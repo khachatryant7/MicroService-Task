@@ -33,12 +33,12 @@ public class ServiceBController {
         return "Hello from service B!";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/getUser")
     public List<UserEntity> getUsers(){
         return userRepository.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
     public ResponseEntity<?> createUser(
     @RequestHeader(value = "Idempotency-key", required = false) String idempotencyKey,
     @RequestBody UserDto dto){
