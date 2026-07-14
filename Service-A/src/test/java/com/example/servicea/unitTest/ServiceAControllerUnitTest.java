@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -29,11 +28,11 @@ class ServiceAControllerUnitTest {
     @InjectMocks
     private ServiceAController controller;
 
-    private UserEntity sampleUser;
+    private UserEntity user;
 
     @BeforeEach
     void setUp() {
-        sampleUser = UserEntity.builder()
+        user = UserEntity.builder()
                 .id(UUID.randomUUID())
                 .name("john")
                 .email("john@example.com")
@@ -50,7 +49,7 @@ class ServiceAControllerUnitTest {
 
     @Test
     void getUsers_returnsAllUsersFromRepository() {
-        when(userRepository.findAll()).thenReturn(List.of(sampleUser));
+        when(userRepository.findAll()).thenReturn(List.of(user));
 
         List<UserEntity> result = controller.getUsers();
 
@@ -75,7 +74,7 @@ class ServiceAControllerUnitTest {
                 .email("jane@example.com")
                 .build();
 
-        when(userRepository.save(any(UserEntity.class))).thenReturn(sampleUser);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
         ResponseEntity<?> response = controller.createUser(null, dto);
 
@@ -91,11 +90,11 @@ class ServiceAControllerUnitTest {
                 .email("john@example.com")
                 .build();
 
-        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(sampleUser));
+        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
 
         ResponseEntity<?> response = controller.createUser("idem-key-123", dto);
 
-        assertThat(response.getBody()).isEqualTo(sampleUser);
+        assertThat(response.getBody()).isEqualTo(user);
         verify(userRepository, times(1)).findByEmail("john@example.com");
         verify(userRepository, never()).save(any(UserEntity.class));
     }
@@ -108,7 +107,7 @@ class ServiceAControllerUnitTest {
                 .build();
 
         when(userRepository.findByEmail("new@example.com")).thenReturn(Optional.empty());
-        when(userRepository.save(any(UserEntity.class))).thenReturn(sampleUser);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
         ResponseEntity<?> response = controller.createUser("idem-key-456", dto);
 

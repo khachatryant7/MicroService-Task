@@ -10,16 +10,16 @@ services:
       timeout: 5s
       retries: 5
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    ports:
-      - '3307:3306'
+  postgres:
+    image: postgres:18
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: micro_service
+      POSTGRES_DB: micro_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,8 +43,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=JDBC:mysql://mysql:3306/micro_service
-      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/micro_service
+      - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - EUREKA_INSTANCE_HOSTNAME=localhost
@@ -52,7 +52,7 @@ services:
     depends_on:
       eureka-server:
         condition: service_healthy
-      mysql:
+      postgres:
         condition: service_healthy
       kafka:
         condition: service_healthy
@@ -65,8 +65,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=JDBC:mysql://mysql:3306/micro_service
-      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/micro_service
+      - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - EUREKA_INSTANCE_HOSTNAME=localhost
@@ -74,30 +74,29 @@ services:
     depends_on:
       eureka-server:
         condition: service_healthy
-      mysql:
+      postgres:
         condition: service_healthy
       kafka:
         condition: service_healthy
 
-
   kafka:
-   image: apache/kafka:3.7.0
-   container_name: kafka
-   ports:
-     - "9094:9094"
-   environment:
-     KAFKA_NODE_ID: 1
-     KAFKA_PROCESS_ROLES: broker,controller
-     KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9094
-     KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
-     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
-     KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-     KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-     KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-   healthcheck:
-     test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
-     interval: 10s
-     timeout: 10s
-     retries: 10
+    image: apache/kafka:3.7.0
+    container_name: kafka
+    ports:
+      - "9094:9094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10

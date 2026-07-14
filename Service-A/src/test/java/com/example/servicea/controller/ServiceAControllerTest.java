@@ -11,10 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -27,17 +29,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Testcontainers
 @SpringBootTest(properties = {
-        "static KafkaContainer Kafka = new KafkaContainer(DockerImageName.parse(\"apache/kafka:3.7.0\"))"
+        "eureka.client.enabled=false",
+        "spring.cloud.discovery.enabled=false",
+        "spring.kafka.listener.auto-startup=false",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 @AutoConfigureMockMvc
 class ServiceAControllerTest {
 
     @Container
     @ServiceConnection
-    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18")
             .withDatabaseName("micro_service_test")
             .withUsername("root")
             .withPassword("root");
+
+    @MockBean
+    KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     MockMvc mockMvc;
@@ -49,25 +57,25 @@ class ServiceAControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userRepository.deleteAll();
     }
 
     @AfterEach
-    void setDown(){
+    void setDown() {
         userRepository.deleteAll();
     }
 
     @Test
-    void hello_shouldReturnGreeting() throws Exception{
-        mockMvc.perform(get("api/v1/users/hello"))
+    void hello_shouldReturnGreeting() throws Exception {
+        mockMvc.perform(get("/api/v1/users/hello"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hello from service A!"));
     }
 
     @Test
-    void getUsers_whenNoUsers_ShouldReturnEmptyList() throws Exception{
-        mockMvc.perform(get("api/v1/users/getUsers"))
+    void createUser_WhenNoUsers_ShouldReturnEmptyList() throws Exception {
+        mockMvc.perform(get("/api/v1/users/getUser"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -82,7 +90,7 @@ class ServiceAControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Tik"))
+                .andExpect(jsonPath("$.name").value("tik"))
                 .andExpect(jsonPath("$.email").value("tik@example.com"));
 
         var saved = userRepository.findByEmail("tik@example.com");
@@ -101,12 +109,12 @@ class ServiceAControllerTest {
 
         UserDto userDto = new UserDto();
         userDto.setName("Jon");
-        userDto.setEmail("single@mail.ru.ru");
+        userDto.setEmail("single@mail.ru");
 
         mockMvc.perform(post("/api/v1/users/createUser")
                         .header("Idempotency-key", "something-2233")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("single@mail.ru"));
 
@@ -114,7 +122,7 @@ class ServiceAControllerTest {
     }
 
     @Test
-    void getUser_shouldReturnAllUsers(){
+    void getUser_shouldReturnAllUsers() {
         userRepository.save(UserEntity.builder()
                 .name("User One")
                 .email("UserOne@mail.su")

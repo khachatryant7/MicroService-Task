@@ -4,17 +4,14 @@ spring:
   application:
     name: Service-B
   datasource:
-    url: jdbc:mysql://localhost:3306/micro_service?createDatabaseIfNotExist=true
-    username: root
+    url: jdbc:postgresql://postgres:5432/micro_service
+    username: postgres
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+    driver-class-name: org.postgresql.Drive
+    jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 8082

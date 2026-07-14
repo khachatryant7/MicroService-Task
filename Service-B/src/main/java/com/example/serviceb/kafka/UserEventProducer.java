@@ -16,7 +16,7 @@ public class UserEventProducer {
     public void sendUserCreatedEvent(String email){
 
         String message = "User created" + email;
-        log.info("[service-a] published to Kafka: {}" + message);
+        log.info("[Service-a] published to Kafka: {}", message);
         kafkaTemplate.send(KafkaTopics.TOPIC3, message);
 
     }
