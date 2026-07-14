@@ -7,8 +7,10 @@ spring:
     url: jdbc:postgresql://postgres:5432/micro_service
     username: postgres
     password: root
-    driver-class-name: org.postgresql.Drive
+    driver-class-name: org.postgresql.Driver
     jpa:
+      hibernate:
+        ddl-auto: update
       properties:
         hibernate:
           dialect: org.hibernate.dialect.PostgreSQLDialect
