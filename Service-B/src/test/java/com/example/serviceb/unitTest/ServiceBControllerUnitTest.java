@@ -4,6 +4,7 @@ import com.example.serviceb.controller.ServiceBController;
 import com.example.serviceb.dto.UserDto;
 import com.example.serviceb.entity.UserEntity;
 import com.example.serviceb.repository.UserRepository;
+import com.example.serviceb.utility.ObjectGenerating;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +15,12 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ServiceBControllerUnitTest {
+public class ServiceBControllerUnitTest extends ObjectGenerating {
 
     @Mock
     private UserRepository userRepository;
@@ -28,20 +28,13 @@ public class ServiceBControllerUnitTest {
     @InjectMocks
     ServiceBController controller;
 
-    private UserEntity user;
-
     @BeforeEach
-    void setUp(){
-        user = UserEntity.builder()
-                .id(UUID.randomUUID())
-                .name("Sergey")
-                .email("Sergey@example.com")
-                .password("qwerty")
-                .build();
+    void setUp() {
+        user = generateUser();
     }
 
     @Test
-    void hello_returnsGreeting(){
+    void hello_returnsGreeting() {
         String result = controller.ServiceB();
 
         assertThat(result).isEqualTo("Hello from service B!");

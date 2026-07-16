@@ -4,6 +4,7 @@ import com.example.servicea.controller.ServiceAController;
 import com.example.servicea.dto.UserDto;
 import com.example.servicea.entity.UserEntity;
 import com.example.servicea.repository.UserRepository;
+import com.example.servicea.utility.ObjectGenerating;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ServiceAControllerUnitTest {
+class ServiceAControllerUnitTest extends ObjectGenerating {
 
     @Mock
     private UserRepository userRepository;
@@ -28,16 +29,9 @@ class ServiceAControllerUnitTest {
     @InjectMocks
     private ServiceAController controller;
 
-    private UserEntity user;
-
     @BeforeEach
     void setUp() {
-        user = UserEntity.builder()
-                .id(UUID.randomUUID())
-                .name("john")
-                .email("john@example.com")
-                .password("qwerty")
-                .build();
+        user = generateUser();
     }
 
     @Test

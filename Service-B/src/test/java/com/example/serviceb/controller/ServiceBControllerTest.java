@@ -2,21 +2,13 @@ package com.example.serviceb.controller;
 
 import com.example.serviceb.dto.UserDto;
 import com.example.serviceb.entity.UserEntity;
-import com.example.serviceb.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.serviceb.integrationTest.AbstractIntegrationClass;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.UUID;
@@ -34,28 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 @AutoConfigureMockMvc
-class ServiceBControllerTest {
-
-
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18")
-            .withDatabaseName("micro_service_test")
-            .withUsername("root")
-            .withPassword("root");
-
-    @MockBean
-    KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
+class ServiceBControllerTest extends AbstractIntegrationClass {
 
     @BeforeEach
     void setUp() {

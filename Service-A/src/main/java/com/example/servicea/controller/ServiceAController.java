@@ -9,9 +9,10 @@ import com.example.servicea.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -30,10 +31,10 @@ public class ServiceAController {
     }
 
     @GetMapping("/hello")
-    public String ServiceA(){
+    public String ServiceA() {
         return "Hello from service A!";
     }
-    
+
     @GetMapping("/getUser")
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
@@ -42,10 +43,10 @@ public class ServiceAController {
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(
             @RequestHeader(value = "Idempotency-key", required = false) String idempotencyKey,
-            @RequestBody UserDto dto){
-        if (idempotencyKey != null){
+            @RequestBody UserDto dto) {
+        if (idempotencyKey != null) {
             var existing = userRepository.findByEmail(dto.getEmail());
-            if (existing.isPresent()){
+            if (existing.isPresent()) {
                 return ResponseEntity.ok(existing.get());
             }
         }
@@ -59,10 +60,10 @@ public class ServiceAController {
 
     @GetMapping("/ask")
     public ResponseEntity<String> ask(@RequestParam String message) throws Exception {
-        String correlationId = java.util.UUID.randomUUID().toString();
+        String correlationId = UUID.randomUUID().toString();
         CompletableFuture<String> future = requestReplyConsumer.wait(correlationId);
         requestProducer.sendRequest(correlationId, message);
-        String reply = future.get(10, java.util.concurrent.TimeUnit.SECONDS);
+        String reply = future.get(10, TimeUnit.SECONDS);
         return ResponseEntity.ok(reply);
     }
 }
